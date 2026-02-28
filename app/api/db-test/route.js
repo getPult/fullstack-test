@@ -8,9 +8,11 @@ export async function GET() {
     return Response.json({ error: "DATABASE_URL not set" }, { status: 503 });
   }
 
+  // Strip sslmode from URL to avoid pg driver conflict, handle SSL explicitly
+  const cleanUrl = databaseUrl.replace(/[?&]sslmode=[^&]*/g, "").replace(/\?$/, "");
   const client = new pg.Client({
-    connectionString: databaseUrl,
-    ssl: databaseUrl.includes("sslmode=require") ? { rejectUnauthorized: false } : false,
+    connectionString: cleanUrl,
+    ssl: { rejectUnauthorized: false },
     connectionTimeoutMillis: 5000,
   });
 
