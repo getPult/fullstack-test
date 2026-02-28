@@ -1,5 +1,7 @@
 import pg from "pg";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
